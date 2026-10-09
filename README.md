@@ -77,3 +77,13 @@ uv run python -m vanta_omens.app
 ```bash
 uv run pytest
 ```
+
+## Node tool installation policy
+
+Owned image and workstation tool installs bootstrap only pnpm 11.28.5 with
+npm hooks disabled, then install reviewed tool pins with a strict 24-hour
+publication delay, required timestamps, and disabled lifecycle hooks. Global
+installs receive the policy explicitly; a project workspace policy does not
+cover global installation. Upgrade the pinned tools through review. Node.js
+22 or newer is required. Image builds and workstation bootstrap are not run
+by this migration; existing tool binary paths are preserved.

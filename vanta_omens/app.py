@@ -10,7 +10,18 @@ app_image = (
     Image(base_image="tensorlake/ubuntu-minimal")
     .run("apt-get update && apt-get install -y git curl ca-certificates")
     .run("pip install httpx pydantic tensorlake")
-    .run("npm install -g @openai/codex")
+    .run(
+        'npm install --global --ignore-scripts pnpm@11.28.5 && '
+        'mkdir -p /usr/local/lib/tensorlake-tools && '
+        'pnpm --dir /usr/local/lib/tensorlake-tools --config.minimumReleaseAge=1440 '
+        '--config.minimumReleaseAgeStrict=true '
+        '--config.minimumReleaseAgeIgnoreMissingTime=false '
+        '--config.trustLockfile=false --config.blockExoticSubdeps=true '
+        '--config.strictDepBuilds=true --config.optimisticRepeatInstall=false add '
+        '--ignore-scripts --save-exact @openai/codex@0.161.0 && '
+        'for executable in /usr/local/lib/tensorlake-tools/node_modules/.bin/*; do [ ! '
+        '-e "$executable" ] || ln -sf "$executable" /usr/local/bin/; done'
+    )
 )
 
 VANTA_SECRETS = ["VANTA_CLIENT_ID", "VANTA_CLIENT_SECRET"]
